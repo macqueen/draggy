@@ -3,10 +3,26 @@
 
     var outer = document.getElementById('outer');
     var inner = document.getElementById('inner');
-
     var outerClientRect = outer.getBoundingClientRect();
-    var maxLeft = outer.offsetWidth - inner.offsetWidth - BORDER_WIDTH * 2;
-    var maxTop = outer.offsetHeight - inner.offsetHeight - BORDER_WIDTH * 2;
+
+    var getMaxLeft = function() {
+        return outer.offsetWidth - inner.offsetWidth - BORDER_WIDTH * 2;
+    };
+    var getMaxTop = function() {
+        return outer.offsetHeight - inner.offsetHeight - BORDER_WIDTH * 2;
+    };
+    var setStyle = function(el, top, left) {
+        el.style.top = top + 'px';
+        el.style.left = left + 'px';
+    };
+
+    var maxLeft = getMaxLeft();
+    var maxTop = getMaxTop();
+    window.onresize = function() {
+        maxLeft = getMaxLeft();
+        maxTop = getMaxTop();
+        setStyle(inner, 0, 0);
+    };
 
     var dragging = false;
 
@@ -30,12 +46,11 @@
         } else if (top > maxTop) {
             top = maxTop;
         }
-        inner.style.top = top + 'px';
-        inner.style.left = left + 'px';
-        inner.style.position = 'absolute';
+        setStyle(inner, top, left);
     };
 
     document.onmouseup = function() {
         dragging = false;
     };
+
 })();
